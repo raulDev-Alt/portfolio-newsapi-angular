@@ -1,0 +1,18 @@
+<article class="article-card-container">
+    <div class="image-wrapper">
+        <img [src]="imageURL" alt="Article image">
+    </div>
+    <div>
+        <div>
+            <h1>{{ title }}</h1>
+        </div>
+        <div>{{ description }}</div>
+        <div>
+            <label for="author">Author:</label>
+            <span id="author">{{ author }}</span>
+        </div>
+        <div>
+            <a [href]="fullArticleAddress" target="_blank" rel="noreferrer noopener">See complete article</a>
+        </div>
+    </div>
+</article>
