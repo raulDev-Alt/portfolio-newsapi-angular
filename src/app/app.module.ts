@@ -4,19 +4,25 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { NewsListComponent } from './news-list/news-list.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NewsListComponent } from './modules/news-list/news-list.component';
+import { ViewModule } from './modules/view.module';
+import { NewzService } from './core/services/newz.service';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NewsListComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    ViewModule
   ],
-  providers: [],
+  providers: [
+    NewzService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
