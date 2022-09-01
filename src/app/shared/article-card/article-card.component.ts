@@ -14,7 +14,7 @@ export class ArticleCardComponent implements OnInit {
   
   @Input() description?: string;
 
-  @Input() author?: string;
+  @Input() author: string = 'Unknown';
 
   @Input() fullArticleAddress?: string;
 

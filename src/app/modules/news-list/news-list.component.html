@@ -1,40 +1,48 @@
 <div>
     <header>
-        <h1></h1>
         <div>
             <label for="searchInput">Search by subject</label>
-            <input type="text" id="searchInput" [(ngModel)]="searchString">
-            <button (click)="getEverything(searchString, currentPage, pageSize)" [disabled]="searchString.length < 3">Search</button>
+            <input type="text" id="searchInput" [(ngModel)]="searchString" minlength="3" required #searchBar>
+            <button (click)="getEverything(searchString, currentPage, pageSize)" [disabled]="!searchBar.validity.valid || loading">Search</button>
         </div>
         <div>
-            <select (change)="switchPageSize()">
+            <select [disabled]="loading" (change)="switchPageSize(comboPageSizes.value)" #comboPageSizes>
                 <ng-container *ngFor="let size of pageSizes">                    
                     <option [value]="size" [selected]="pageSize === size">{{ size }}</option>
                 </ng-container>
             </select>
         </div>
     </header>
-    <section>
-        <ng-container *ngIf="articles && articles.length > 0; else noArticles">
-            <ol *ngFor="let article of articles">
-                <li>
-                    <app-article-card [imageURL]="article.urlToImage" [title]="article.title" 
-                    [description]="article.description" [author]="article.author" 
-                    [fullArticleAddress]="article.url"></app-article-card>
-                </li>
-            </ol>
-        </ng-container>
-        <ng-template #noArticles>
-            <h3>No articles found</h3>
-        </ng-template>
-    </section>
-    <footer>
-        <div class="pagination">
-            <button>First</button>
-            <button>Previous</button>
-            <span>{{ currentPage }}</span>
-            <button>Next</button>
-            <button>Last</button>
+    <ng-container *ngIf="!loading; else isLoading">
+        <section>
+            <ng-container *ngIf="articles && articles.length > 0; else noArticleFound">
+                <ol *ngFor="let article of articles">
+                    <li>
+                        <app-article-card [imageURL]="article.urlToImage" [title]="article.title" 
+                        [description]="article.description" [author]="article.author" 
+                        [fullArticleAddress]="article.url"></app-article-card>
+                    </li>
+                </ol>
+            </ng-container>
+            <ng-template #noArticleFound>
+                <h3>No articles found</h3>            
+            </ng-template>
+        </section>
+        <footer>
+            <div class="pagination">
+                <button class="pagination-btn" [hidden]="currentPage === 1" (click)="firstPage()">First</button>
+                <button class="pagination-btn" (click)="previousPage()">Previous</button>
+                <span class="pagination-btn no-hover">{{ currentPage }}</span>
+                <button class="pagination-btn" (click)="nextPage()">Next</button>
+                <button class="pagination-btn" [hidden]="currentPage === totalPages" (click)="lastPage()">Last</button>
+            </div>
+        </footer>
+    </ng-container>
+    <ng-template #isLoading>
+        <div>
+            <span>
+                <b>Loading...</b>
+            </span>
         </div>
-    </footer>
+    </ng-template>
 </div>

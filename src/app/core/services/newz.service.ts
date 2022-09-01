@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ArticleResponseModel } from '../models/article-response.model';
 import { ArticleModel } from '../models/article.model';
 
 @Injectable()
@@ -10,7 +11,7 @@ export class NewzService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getEverything(q?: string, page?: number, pageSize?: number): Observable<ArticleModel[]> {
+  public getEverything(q?: string, page?: number, pageSize?: number): Observable<ArticleResponseModel> {
     let params: HttpParams | undefined;
     
     if (q && page && pageSize) {
@@ -20,7 +21,7 @@ export class NewzService {
         .set('pageSize', String(pageSize));
     }
     
-    return this.httpClient.get<ArticleModel[]>(`${this.API_URL}/everything`, {
+    return this.httpClient.get<ArticleResponseModel>(`${this.API_URL}/everything`, {
       responseType: 'json',
       params: params
     });
