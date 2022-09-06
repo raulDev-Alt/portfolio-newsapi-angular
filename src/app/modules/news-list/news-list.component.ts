@@ -8,18 +8,29 @@ import { finalize, map } from 'rxjs/operators';
   styleUrls: ['./news-list.component.scss']
 })
 export class NewsListComponent implements OnInit {
+  readonly title: string = 'People News';
+  screenHasDesktopWidth: boolean = false;
   loading: boolean = false;
+  verticalMenuToggled: boolean = false;
 
   articles?: ArticleModel[];
-  
-  currentSearch: string = '';
-  searchString: string = '';
+
+  topicValue: string = '';
   
   //pagination props
   currentPage: number = 1;
   pageSizes: number[] = [10, 25, 50];
   pageSize: number = 10;
   totalPages: number = 1;
+
+  readonly topics: string[] = [
+      'today',
+      'tech',
+      'finances',
+      'politics',
+      'sports',
+      'science'
+  ];
 
   constructor(private newzService: NewzService) { }
 
@@ -48,32 +59,30 @@ export class NewsListComponent implements OnInit {
     );
   }
 
-  search() {
-    if (this.searchString && this.searchString.length > 3) {
-      this.currentSearch = this.searchString;
-      this.getEverything(this.searchString, this.currentPage, this.pageSize);
-    }
+  search(q: string) {
+    this.topicValue = q;
+    this.getEverything(q, this.currentPage, this.pageSize);
   }
 
   // PAGINATION
   switchPageSize(size: string) {
     this.pageSize = +size;
-    this.getEverything(this.currentSearch, this.currentPage, this.pageSize);
+    this.getEverything(this.topicValue, this.currentPage, this.pageSize);
   }
 
   firstPage() {    
-    this.getEverything(this.currentSearch, 1, this.pageSize);
+    this.getEverything(this.topicValue, 1, this.pageSize);
   }
 
   previousPage() {
-    this.getEverything(this.currentSearch, this.currentPage - 1, this.pageSize);
+    this.getEverything(this.topicValue, this.currentPage - 1, this.pageSize);
   }
 
   nextPage() {
-    this.getEverything(this.currentSearch, this.currentPage + 1, this.pageSize);
+    this.getEverything(this.topicValue, this.currentPage + 1, this.pageSize);
   }
 
   lastPage() {
-    this.getEverything(this.currentSearch, this.totalPages, this.pageSize);
+    this.getEverything(this.topicValue, this.totalPages, this.pageSize);
   }
 }
